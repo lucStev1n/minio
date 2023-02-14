@@ -28,6 +28,13 @@ public class FilerController {
         return service.find("", regex);
     }
 
+    //todo 创建文件夹, 文件
+    @PostMapping("source")
+    public Object mkdir() {
+        service.create("", null);
+        return null;
+    }
+
     //todo 重命名 移动
     @PatchMapping
     public Object mv() {
@@ -39,13 +46,6 @@ public class FilerController {
     @DeleteMapping
     public Object rm() {
         service.rm("");
-        return null;
-    }
-
-    //todo 创建文件夹, 文件
-    @PostMapping("source")
-    public Object mkdir() {
-        service.create("", null);
         return null;
     }
 
