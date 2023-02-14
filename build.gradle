@@ -18,7 +18,7 @@ subprojects {
 
     group 'cs.jou'
     version '0.3.63'
-//    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_11
 
     dependencyManagement {
         imports {
@@ -34,7 +34,6 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
 
         implementation 'com.google.code.gson:gson'
-
 
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
