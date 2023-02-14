@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "minio",
+      "type": "cs.jou.minio.Minio$Props",
+      "sourceType": "cs.jou.minio.Minio$Props"
+    }
+  ],
+  "properties": [
+    {
+      "name": "minio.accesskey",
+      "type": "java.lang.String",
+      "sourceType": "cs.jou.minio.Minio$Props"
+    },
+    {
+      "name": "minio.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "cs.jou.minio.Minio$Props"
+    },
+    {
+      "name": "minio.secretkey",
+      "type": "java.lang.String",
+      "sourceType": "cs.jou.minio.Minio$Props"
+    }
+  ],
+  "hints": []
+}

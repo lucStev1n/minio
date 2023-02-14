@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    include: db
+
+  redis:
+    host: 43.142.238.100
+    port: 47001
+    password: redis181117.
+
+server:
+  port: 9091
+
+minio:
+  endpoint: http://43.142.238.100:9000/
+  accesskey: minioadmin
+  secretkey: minioadmin

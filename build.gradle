@@ -1,0 +1,54 @@
+plugins {
+    id "org.springframework.boot" version "2.7.6" apply false
+}
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/spring' }
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin' }
+        mavenCentral()
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group 'cs.jou'
+    version '0.3.63'
+//    sourceCompatibility = JavaVersion.VERSION_11
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:2.7.6"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:2021.0.5"
+            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:2021.0.4.0"
+        }
+        dependencies {
+
+        }
+    }
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+
+        implementation 'com.google.code.gson:gson'
+
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+        implementation 'org.springframework:spring-context'
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+        implementation 'org.springframework.boot:spring-boot-configuration-processor'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+    configurations {
+        conpileOnly {
+            annotationProcessor
+        }
+    }
+    jar { enabled true }
+    test { useJUnitPlatform() }
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+}
