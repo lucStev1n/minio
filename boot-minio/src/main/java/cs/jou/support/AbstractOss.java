@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +27,7 @@ public abstract class AbstractOss implements FileClient {
 
     public static String format(long size) {
         if (size <= 0L) {
-            return "0";
+            return "-";
         } else {
             int digitGroups = Math.min(UNIT_NAMES.length - 1, (int) (Math.log10((double) size) / Math.log10(1024.0)));
             return (new DecimalFormat("#,##0.##")).format((double) size / Math.pow(1024.0, (double) digitGroups)) + " " + UNIT_NAMES[digitGroups];
@@ -53,9 +53,22 @@ public abstract class AbstractOss implements FileClient {
 
     }
 
-    public List find(String root, String regex) {
+    public List<Meta> find(String root, String regex) {
+        return doFind(ls(root, true), regex);
+    }
 
-        return null;
+    private ArrayList<Meta> doFind(List<Meta> ls, String regex) {
+        ArrayList<Meta> tmp = new ArrayList<>();
+        for (Meta item : ls) {
+            if (item.getName().contains(regex)) tmp.add(item);
+            if (item.isDir()) {
+                tmp.addAll(doFind(item.getChildren(), regex));
+            }
+        }
+
+        tmp.forEach(item -> item.setChildren(Collections.emptyList()));
+
+        return tmp;
     }
 
     public void preview() {
@@ -71,9 +84,13 @@ public abstract class AbstractOss implements FileClient {
     }
 
     @SneakyThrows
-    public List<?> ls(String root, boolean r) {
+    public List<Meta> ls(String root, boolean r) {
         if (root == null) {
-            root = "/";
+            root = "";
+        }
+
+        if (!root.endsWith("/")) {
+            root += "/";
         }
 
         ArrayList<Item> result = new ArrayList<>();
@@ -88,13 +105,25 @@ public abstract class AbstractOss implements FileClient {
         }
 
         return result.stream().map(item -> {
-            HashMap<String, Object> data = new HashMap<>();
+            Meta meta = new Meta();
 
-            data.put("name", item.objectName());
-            data.put("size", format(item.size()));
-            data.put("type", item.isDir() ? "folder" : "file");
+            meta.setName(item.objectName());
+            meta.setSize(format(item.size()));
+            meta.setDir(item.isDir());
 
-            return data;
+            if (meta.isDir()) {
+                meta.setModify("-");
+                meta.setType("folder");
+            } else {
+                meta.setModify(item.lastModified().toString());
+                meta.setType("file");
+            }
+
+            if (r && meta.isDir()) {
+                meta.setChildren(ls(item.objectName(), true));
+            }
+
+            return meta;
         }).collect(Collectors.toList());
     }
 

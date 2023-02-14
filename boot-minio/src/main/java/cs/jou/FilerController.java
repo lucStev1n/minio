@@ -16,7 +16,7 @@ public class FilerController {
     }
 
     //todo ls
-    @GetMapping({"/{root}", "/", ""})
+    @GetMapping({"ls/{root}", "ls/", "ls"})
     public Object ls(@PathVariable(required = false) String root) {
         List result = service.ls(root, false);
         return result;
