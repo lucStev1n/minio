@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +33,13 @@ public abstract class AbstractOss implements FileClient {
             int digitGroups = Math.min(UNIT_NAMES.length - 1, (int) (Math.log10((double) size) / Math.log10(1024.0)));
             return (new DecimalFormat("#,##0.##")).format((double) size / Math.pow(1024.0, (double) digitGroups)) + " " + UNIT_NAMES[digitGroups];
         }
+    }
+
+    private static String parseName(Item item, final String root) {
+        if (root.length() > 1) {
+
+        }
+        return item.objectName();
     }
 
     @NotNull
@@ -60,7 +68,7 @@ public abstract class AbstractOss implements FileClient {
     private ArrayList<Meta> doFind(List<Meta> ls, String regex) {
         ArrayList<Meta> tmp = new ArrayList<>();
         for (Meta item : ls) {
-            if (item.getName().contains(regex)) tmp.add(item);
+            if (Pattern.matches(regex, item.getName())) tmp.add(item);
             if (item.isDir()) {
                 tmp.addAll(doFind(item.getChildren(), regex));
             }
@@ -94,7 +102,6 @@ public abstract class AbstractOss implements FileClient {
         }
 
         ArrayList<Item> result = new ArrayList<>();
-
         for (Result<Item> item
                 : Client().listObjects(ListObjectsArgs.builder()
                 .bucket(namespace())
@@ -104,10 +111,11 @@ public abstract class AbstractOss implements FileClient {
             result.add(item.get());
         }
 
+        final String finalRoot = root;
         return result.stream().map(item -> {
             Meta meta = new Meta();
 
-            meta.setName(item.objectName());
+            meta.setName(parseName(item, finalRoot));
             meta.setSize(format(item.size()));
             meta.setDir(item.isDir());
 
@@ -120,7 +128,7 @@ public abstract class AbstractOss implements FileClient {
             }
 
             if (r && meta.isDir()) {
-                meta.setChildren(ls(item.objectName(), true));
+                meta.setChildren(ls(parseName(item, finalRoot), true));
             }
 
             return meta;

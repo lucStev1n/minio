@@ -2,4 +2,5 @@ rootProject.name = 'app'
 include 'algorithm'
 include 'DP'
 include 'boot-minio'
+include 'boot-cache'
 

@@ -16,21 +16,21 @@ public class FilerController {
     }
 
     //todo ls
-    @GetMapping({"ls/{root}", "ls/", "ls"})
-    public Object ls(@PathVariable(required = false) String root) {
-        List result = service.ls(root, false);
+    @GetMapping("ls")
+    public Object ls(@RequestParam(required = false) String path) {
+        List result = service.ls(path, false);
         return result;
     }
 
     //todo 搜索 find
-    @GetMapping("source/{regex}")
-    public Object find(@PathVariable String regex) {
-        return service.find("", regex);
+    @GetMapping("regex/{regex}")
+    public Object find(@PathVariable String regex, @RequestParam(required = false) String path) {
+        return service.find(path, regex);
     }
 
     //todo 创建文件夹, 文件
-    @PostMapping("source")
-    public Object mkdir() {
+    @PostMapping("source/{name}")
+    public Object mkdir(@PathVariable String name, @RequestParam(required = false) String path) {
         service.create("", null);
         return null;
     }
