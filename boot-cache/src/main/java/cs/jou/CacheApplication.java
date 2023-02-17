@@ -18,19 +18,6 @@ public class CacheApplication {
     StringRedisTemplate template;
 
     public static void main(String[] args) {
-        ArrayList<Object> ls = new ArrayList<>();
-        ls.add("1");
-        ls.add("2");
-        ls.add("3");
-        ls.add("4");
-        ls.add("5");
-
-        System.out.println(ls.indexOf("3"));
-
-        ls.remove("4");
-        System.out.println(ls.indexOf("4"));
-
-        ls.forEach(System.out::println);
     }
 
     /**

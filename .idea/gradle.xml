@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/algorithm" />
             <option value="$PROJECT_DIR$/boot-cache" />
             <option value="$PROJECT_DIR$/boot-minio" />
+            <option value="$PROJECT_DIR$/boot-security" />
           </set>
         </option>
       </GradleProjectSettings>
